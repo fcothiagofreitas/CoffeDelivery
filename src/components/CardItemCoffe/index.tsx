@@ -1,5 +1,6 @@
+import { QuantiControler } from '../QuantiControler';
 import { CardCoffe } from './styles';
-import { Minus, Plus, ShoppingCartSimple } from 'phosphor-react';
+import { ShoppingCartSimple } from 'phosphor-react';
 
 interface PropsCardCoffe {
   name: string;
@@ -33,15 +34,7 @@ export function CardItemCoffe({
       <div className="bottom">
         <div className="preco">{price}</div>
         <div className="buy">
-          <div className="quanti">
-            <button>
-              <Minus size={14} weight="bold" />
-            </button>
-            <p>1</p>
-            <button>
-              <Plus size={14} weight="bold" />
-            </button>
-          </div>
+          <QuantiControler />
           <button className="addCart">
             <ShoppingCartSimple weight="fill" size={22} />
           </button>

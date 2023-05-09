@@ -4,6 +4,7 @@ import {
   CurrencyDollarSimple,
   MapPinLine,
   Money,
+  Trash,
 } from 'phosphor-react';
 import { LayoutContainer } from '../../layouts/styles';
 import {
@@ -13,8 +14,11 @@ import {
   CartCheck,
   FormContainer,
   ButtomPayment,
+  ItemSelected,
 } from './styles';
 import { useForm } from 'react-hook-form';
+import { QuantiControler } from '../../components/QuantiControler';
+import imgCoffe from '../../assets/coffes/americano.png';
 
 export function Cart() {
   const { register, handleSubmit } = useForm();
@@ -100,7 +104,51 @@ export function Cart() {
         <CompleteInfos>
           <h3>Cafés selecionados</h3>
           <CartCheck>
-            <button type="submit">Enviar</button>
+            <ItemSelected>
+              <img src={imgCoffe} alt="" />
+              <div className="content">
+                <div className="infos">
+                  <p>Expresso Americano</p>
+                  <div className="preco">R$ 9,90</div>
+                </div>
+                <div className="actions">
+                  <QuantiControler />
+                  <button className="remover">
+                    <Trash /> Remover
+                  </button>
+                </div>
+              </div>
+            </ItemSelected>
+            <ItemSelected>
+              <img src={imgCoffe} alt="" />
+              <div className="content">
+                <div className="infos">
+                  <p>Expresso Americano</p>
+                  <div className="preco">R$ 9,90</div>
+                </div>
+                <div className="actions">
+                  <QuantiControler />
+                  <button className="remover">
+                    <Trash /> Remover
+                  </button>
+                </div>
+              </div>
+            </ItemSelected>
+            <div className="resume">
+              <div className="resumeItem">
+                <p>Toral de itens</p>
+                <p>R$ 29,30</p>
+              </div>
+              <div className="resumeItem">
+                <p>Entrega</p>
+                <p>R$ 9,30</p>
+              </div>
+              <div className="resumeItem">
+                <p>Toral </p>
+                <p>R$ 38,60</p>
+              </div>
+            </div>
+            <button type="submit">Confirmar Pedido</button>
           </CartCheck>
         </CompleteInfos>
       </FormContainer>

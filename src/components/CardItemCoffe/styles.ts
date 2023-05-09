@@ -66,23 +66,7 @@ export const CardCoffe = styled.div`
       font-weight: 400;
     }
   }
-  .quanti {
-    align-items: center;
-    background: ${(props) => props.theme['gray-500']};
-    border-radius: 6px;
-    gap: 0.25rem;
-    width: 100%;
 
-    button {
-      cursor: pointer;
-      padding: 8px;
-      line-height: 0;
-      color: ${(props) => props.theme['purple-500']};
-      &:hover {
-        color: ${(props) => props.theme['purple-900']};
-      }
-    }
-  }
   .addCart {
     background: ${(props) => props.theme['purple-900']};
     color: ${(props) => props.theme['white']};
