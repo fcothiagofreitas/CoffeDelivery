@@ -18,9 +18,12 @@ import {
 } from './styles';
 import { useForm } from 'react-hook-form';
 import { QuantiControler } from '../../components/QuantiControler';
-import imgCoffe from '../../assets/coffes/americano.png';
+import { useContext } from 'react';
+import { CartContext } from '../../context/CartContext';
 
 export function Cart() {
+  const { listCart } = useContext(CartContext);
+
   const { register, handleSubmit } = useForm();
 
   function handleSubmitSendCart(data: any) {
@@ -104,36 +107,24 @@ export function Cart() {
         <CompleteInfos>
           <h3>Cafés selecionados</h3>
           <CartCheck>
-            <ItemSelected>
-              <img src={imgCoffe} alt="" />
-              <div className="content">
-                <div className="infos">
-                  <p>Expresso Americano</p>
-                  <div className="preco">R$ 9,90</div>
+            {listCart.map(({ id, image, name, price, quantity }) => (
+              <ItemSelected key={id}>
+                <img src={image} alt="" />
+                <div className="content">
+                  <div className="infos">
+                    <p>{name}</p>
+                    <div className="preco">R$ {price}</div>
+                  </div>
+                  <div className="actions">
+                    <QuantiControler value={quantity} />
+                    <button className="remover">
+                      <Trash /> Remover
+                    </button>
+                  </div>
                 </div>
-                <div className="actions">
-                  <QuantiControler />
-                  <button className="remover">
-                    <Trash /> Remover
-                  </button>
-                </div>
-              </div>
-            </ItemSelected>
-            <ItemSelected>
-              <img src={imgCoffe} alt="" />
-              <div className="content">
-                <div className="infos">
-                  <p>Expresso Americano</p>
-                  <div className="preco">R$ 9,90</div>
-                </div>
-                <div className="actions">
-                  <QuantiControler />
-                  <button className="remover">
-                    <Trash /> Remover
-                  </button>
-                </div>
-              </div>
-            </ItemSelected>
+              </ItemSelected>
+            ))}
+
             <div className="resume">
               <div className="resumeItem">
                 <p>Toral de itens</p>
