@@ -54,16 +54,18 @@ export const HeaderContainer = styled.header<HeaderContainerProps>`
       color: ${(props) => props.theme.white};
       background: ${(props) => props.theme['yellow-500']};
     }
-    &::before {
-      content: '';
+    .before {
       position: absolute;
       height: 20px;
       width: 20px;
       color: ${(props) => props.theme.white};
-      background: ${(props) => props.theme['yellow-500']};
+      background: ${(props) => props.theme['yellow-900']};
       top: -8px;
       border-radius: 100%;
       left: 25px;
+      justify-content: center;
+      align-items: center;
+      display: flex;
     }
   }
 `;

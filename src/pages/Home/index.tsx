@@ -60,6 +60,7 @@ export function Home() {
         <ListCoffes>
           {dataCoffe.map((coffe) => (
             <CardItemCoffe
+              id={coffe.id}
               key={coffe.id}
               tag={coffe.tag}
               name={coffe.name}
