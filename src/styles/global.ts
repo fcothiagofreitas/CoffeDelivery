@@ -46,6 +46,10 @@ export const GlobalStyle = createGlobalStyle`
     border-radius: 6px;
     cursor: pointer;
   }
- 
+  
+  img{
+    max-width: 100%;
+    height: auto;
+  }
 
 `;

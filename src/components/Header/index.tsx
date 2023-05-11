@@ -3,10 +3,12 @@ import { LayoutContainer } from '../../layouts/styles';
 import { HeaderContainer } from './styles';
 import { MapPin, ShoppingCart } from 'phosphor-react';
 import Logo from '../../assets/Logo.svg';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { CartContext } from '../../contexts/CartContext';
 
 export function Header() {
   const [shadow, setShadow] = useState(false);
+  const { addCart } = useContext(CartContext);
 
   useEffect(() => {
     window.addEventListener('scroll', () => {
@@ -18,8 +20,6 @@ export function Header() {
       }
     });
   }, []);
-
-  // console.log(shadow);
 
   return (
     <HeaderContainer shadow={shadow}>
@@ -33,6 +33,11 @@ export function Header() {
             Porto Alegre, RS
           </NavLink>
           <NavLink to="/cart" title="" className="cart">
+            {addCart.length > 0 ? (
+              <div className="before">{addCart.length}</div>
+            ) : (
+              false
+            )}
             <ShoppingCart weight="fill" size={22} />
           </NavLink>
         </nav>

@@ -164,6 +164,7 @@ export const ItemSelected = styled.div`
     display: flex;
     gap: 0.5rem;
     justify-content: space-between;
+    flex: 1;
   }
   .infos {
     display: flex;

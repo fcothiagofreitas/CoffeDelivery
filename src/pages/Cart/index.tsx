@@ -18,13 +18,61 @@ import {
 } from './styles';
 import { useForm } from 'react-hook-form';
 import { QuantiControler } from '../../components/QuantiControler';
-import imgCoffe from '../../assets/coffes/americano.png';
+import { useContext, useState } from 'react';
+import { CartContext } from '../../contexts/CartContext';
 
 export function Cart() {
   const { register, handleSubmit } = useForm();
+  const { addCart, setAddCart } = useContext(CartContext);
+  const [quantityItem, setQuatityItem] = useState();
+
+  const cartItens = addCart;
 
   function handleSubmitSendCart(data: any) {
     console.log(data);
+  }
+  function handleRemoveItemCart(item) {
+    console.log(item.id);
+
+    setAddCart((state) => state.filter((i) => i.id !== item.id));
+  }
+
+  function handleSubstract(item) {
+    const push = (item.addItem = item.addItem - 1);
+    const verifyId = addCart.find((i) => i.id === item.id);
+
+    setAddCart((state) =>
+      state.map((i) => {
+        if (i.id === item.id) {
+          return { ...i, addItem: push };
+          console.log({ ...i });
+        }
+      }),
+    );
+    if (verifyId.id === item.id) {
+      console.log('addCart=', addCart);
+      console.log('saporra é giau');
+    }
+
+    console.log('item=', item);
+    console.log('verifyId=', verifyId.addItem);
+    console.log(push);
+
+    // if (item.addItem > 0) {
+    //   // (item.addItem = item.addItem - 1)
+    //   const push = (item.addItem = item.addItem - 1);
+    //   // setQuatityItem(push);
+    //   setQuatityItem(() => {
+    //     if (item.id === item.addItem) {
+    //       return { ...item, addItem: push };
+    //     } else {
+    //       return item;
+    //     }
+    //   });
+    // } else {
+    //   handleRemoveItemCart(item);
+    // }
+    console.log();
   }
 
   return (
@@ -104,36 +152,38 @@ export function Cart() {
         <CompleteInfos>
           <h3>Cafés selecionados</h3>
           <CartCheck>
-            <ItemSelected>
-              <img src={imgCoffe} alt="" />
-              <div className="content">
-                <div className="infos">
-                  <p>Expresso Americano</p>
-                  <div className="preco">R$ 9,90</div>
-                </div>
-                <div className="actions">
-                  <QuantiControler />
-                  <button className="remover">
-                    <Trash /> Remover
-                  </button>
-                </div>
-              </div>
-            </ItemSelected>
-            <ItemSelected>
-              <img src={imgCoffe} alt="" />
-              <div className="content">
-                <div className="infos">
-                  <p>Expresso Americano</p>
-                  <div className="preco">R$ 9,90</div>
-                </div>
-                <div className="actions">
-                  <QuantiControler />
-                  <button className="remover">
-                    <Trash /> Remover
-                  </button>
-                </div>
-              </div>
-            </ItemSelected>
+            {cartItens.map((item) => {
+              return (
+                <ItemSelected key={item.id}>
+                  <img src={item.image} alt="" />
+                  <div className="content">
+                    <div className="infos">
+                      <p>{item.name}</p>
+                      <div className="preco">R$ {item.price}</div>
+                    </div>
+                    <div className="actions">
+                      <QuantiControler
+                        value={item.addItem}
+                        onAdd={() => {
+                          setQuatityItem((item.addItem = item.addItem + 1));
+                          console.log(item);
+                        }}
+                        onSubtract={() => handleSubstract(item)}
+                        type="button"
+                      />
+                      <button
+                        className="remover"
+                        onClick={() => handleRemoveItemCart(item)}
+                        type="button"
+                      >
+                        <Trash /> Remover
+                      </button>
+                    </div>
+                  </div>
+                </ItemSelected>
+              );
+            })}
+
             <div className="resume">
               <div className="resumeItem">
                 <p>Toral de itens</p>
