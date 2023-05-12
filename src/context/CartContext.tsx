@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useEffect, useReducer } from 'react';
+import { produce } from 'immer';
 
 interface CartContextProviderProps {
   children: ReactNode;
@@ -23,11 +24,6 @@ interface ListaCartContext {
   addNewItemCart: (data: ItemCarrinho) => void;
 }
 
-// interface CartContextType {
-//   addCart: number;
-//   setAddCart: () => void;
-// }
-
 export const CartContext = createContext({} as ListaCartContext);
 
 export function CartContextProvider({ children }: CartContextProviderProps) {
@@ -35,10 +31,26 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
   const [listaCarrinhoState, dispach] = useReducer(
     (state: Cart, action: any) => {
       if (action.type === 'ADD_ITEM') {
-        return {
-          ...state,
-          listCart: [...state.listCart, action.payload.newItem],
-        };
+        // return {
+        //   ...state,
+        //   listCart: [...state.listCart, action.payload.newItem],
+        // };
+        return produce(state, (draft) => {
+          draft.listCart.push(action.payload.newItem);
+        });
+      }
+      if (action.type === 'UPDATE_ITEM_QUANTITY') {
+        const currentItem = state.listCart.findIndex(
+          (item) => item.id === action.payload.verifyId.id,
+        );
+        return produce(state, (draft) => {
+          draft.listCart[currentItem].quantity =
+            action.payload.newItem.quantity;
+
+          // console.log(action.payload.newItem.quantity);
+          console.log('01=', currentItem);
+          console.log('00=', state.listCart);
+        });
       }
       return state;
     },
@@ -61,7 +73,7 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     localStorage.setItem('@coffe-delivery:cart-list-1.0.0', stateJSON);
   }, [listaCarrinhoState]);
 
-  console.log(listaCarrinhoState);
+  // console.log(listaCarrinhoState);
   const { listCart } = listaCarrinhoState;
 
   // const {};
@@ -74,10 +86,27 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
       price: data.price,
       quantity: data.quantity,
     };
-    dispach({
-      type: 'ADD_ITEM',
-      payload: { newItem },
-    });
+
+    const verifyId = listCart.find((c) => c.id === data.id);
+    if (verifyId) {
+      // return produce(state, (draft) => {
+      //   draft.verifyId.quantity.push(newItem.quantity);
+      // });
+      console.log('o que é o newItem.quantity=', newItem.quantity);
+
+      dispach({
+        type: 'UPDATE_ITEM_QUANTITY',
+        payload: {
+          verifyId,
+          newItem,
+        },
+      });
+    } else {
+      dispach({
+        type: 'ADD_ITEM',
+        payload: { newItem },
+      });
+    }
   }
 
   return (
