@@ -15,6 +15,16 @@ export interface ItemCarrinho {
   tag?: string[] | undefined;
   totalPrice?: number;
 }
+export interface Order {
+  bairro: string;
+  cep: number;
+  cidade: string;
+  complemento: string;
+  numero: string;
+  paymentMethod: string;
+  rua: string;
+  uf: string;
+}
 
 interface Cart {
   listCart: ItemCarrinho[];

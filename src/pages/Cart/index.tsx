@@ -25,9 +25,11 @@ export function Cart() {
   const { register, handleSubmit, setValue, setFocus } = useForm();
 
   const [selected, setSelected] = useState();
+
   function onChangeValue(e) {
     if (e.target.value !== selected) {
       setSelected(e.target.value);
+      setValue('paymentMethod', selected);
     }
   }
   function handleSubmitSendCart(data: any) {
@@ -51,6 +53,8 @@ export function Cart() {
   }
 
   const freteFixed = 9.23;
+  const totalItensValue = listCart.reduce((a, b) => a + b.totalPrice, 0);
+  const totalOrder = totalItensValue + freteFixed;
   return (
     <LayoutContainer style={{ paddingTop: '2rem' }}>
       <FormContainer onSubmit={handleSubmit(handleSubmitSendCart)}>
@@ -78,7 +82,7 @@ export function Cart() {
             <InputComponent
               placeholder="Número"
               className="numero"
-              {...register('numero', { valueAsNumber: true })}
+              {...register('numero')}
             />
             <InputComponent
               placeholder="Complemento"
@@ -134,6 +138,11 @@ export function Cart() {
               >
                 <Money size={16} /> dinheiro
               </ButtomPayment>
+              <input
+                type="text"
+                style={{ display: 'none' }}
+                {...register('paymentMethod')}
+              />
             </div>
           </Card>
         </CompleteInfos>
@@ -156,6 +165,7 @@ export function Cart() {
             <div className="resume">
               <div className="resumeItem">
                 <p>Total de itens</p>
+                <p>R$ {totalItensValue.toFixed(2)}</p>
               </div>
               <div className="resumeItem">
                 <p>Entrega</p>
@@ -163,6 +173,7 @@ export function Cart() {
               </div>
               <div className="resumeItem">
                 <p>Total </p>
+                <p>R$ {totalOrder.toFixed(2)}</p>
               </div>
             </div>
             <button type="submit">Confirmar Pedido</button>
