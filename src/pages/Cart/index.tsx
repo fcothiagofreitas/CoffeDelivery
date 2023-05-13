@@ -113,13 +113,25 @@ export function Cart() {
               </p>
             </div>
             <div className="selectTypePayment" onClick={onChangeValue}>
-              <ButtomPayment type="button" value="Crédito">
+              <ButtomPayment
+                type="button"
+                value="Crédito"
+                className={selected === 'Crédito' ? 'selected' : ''}
+              >
                 <CreditCard size={16} /> Cartão de crédito
               </ButtomPayment>
-              <ButtomPayment type="button" value="Débito">
+              <ButtomPayment
+                type="button"
+                value="Débito"
+                className={selected === 'Débito' ? 'selected' : ''}
+              >
                 <Bank size={16} /> Cartão de débito
               </ButtomPayment>
-              <ButtomPayment type="button" value="Dinheiro">
+              <ButtomPayment
+                type="button"
+                value="Dinheiro"
+                className={selected === 'Dinheiro' ? 'selected' : ''}
+              >
                 <Money size={16} /> dinheiro
               </ButtomPayment>
             </div>
