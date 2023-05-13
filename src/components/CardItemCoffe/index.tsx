@@ -9,7 +9,7 @@ interface PropsCardCoffe {
   name: string;
   image: string;
   description: string;
-  price: string;
+  price: number;
   tag?: string[] | undefined;
 }
 
@@ -22,7 +22,6 @@ export function CardItemCoffe({
   price,
 }: PropsCardCoffe) {
   const { addNewItemCart } = useContext(CartContext);
-
   const [quantity, setQuantity] = useState(1);
 
   function handleAddQuantity() {

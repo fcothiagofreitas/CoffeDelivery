@@ -20,7 +20,7 @@ export const dataCoffe = [
     tag: ['tradicional', 'coco', 'tradicional2'],
     name: 'Expresso Tradicional',
     description: 'O tradicional café feito com água quente e grãos moídos',
-    price: '9,78',
+    price: 9.78,
   },
   {
     id: 2,
@@ -28,7 +28,7 @@ export const dataCoffe = [
     tag: ['tradicional'],
     name: 'Expresso Americano',
     description: 'Expresso diluído, menos intenso que o tradicional',
-    price: '9,78',
+    price: 9.78,
   },
   {
     id: 3,
@@ -36,7 +36,7 @@ export const dataCoffe = [
     tag: ['tradicional'],
     name: 'Expresso Cremoso',
     description: 'Café expresso tradicional com espuma cremosa',
-    price: '9,78',
+    price: 9.78,
   },
   {
     id: 4,
@@ -44,7 +44,7 @@ export const dataCoffe = [
     tag: ['tradicional', 'gelado'],
     name: 'Expresso Gelado',
     description: 'Bebida preparada com café expresso e cubos de gelo',
-    price: '9,78',
+    price: 9.78,
   },
   {
     id: 5,
@@ -52,7 +52,7 @@ export const dataCoffe = [
     tag: ['tradicional', 'com leite'],
     name: 'Café com Leite',
     description: 'Meio a meio de expresso tradicional com leite vaporizado',
-    price: '9,78',
+    price: 9.78,
   },
   {
     id: 6,
@@ -61,6 +61,6 @@ export const dataCoffe = [
     name: 'Latte',
     description:
       'Uma dose de café expresso com o dobro de leite e espuma cremosa',
-    price: '9,78',
+    price: 9.78,
   },
 ];

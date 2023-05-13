@@ -1,10 +1,11 @@
+import { useContext, useState } from 'react';
+import { CartContext } from '../../context/CartContext';
 import {
   Bank,
   CreditCard,
   CurrencyDollarSimple,
   MapPinLine,
   Money,
-  Trash,
 } from 'phosphor-react';
 import { LayoutContainer } from '../../layouts/styles';
 import {
@@ -14,22 +15,42 @@ import {
   CartCheck,
   FormContainer,
   ButtomPayment,
-  ItemSelected,
 } from './styles';
 import { useForm } from 'react-hook-form';
-import { QuantiControler } from '../../components/QuantiControler';
-import { useContext } from 'react';
-import { CartContext } from '../../context/CartContext';
+import { CardItemCoffeCart } from '../../components/CardItemCoffeCart';
 
 export function Cart() {
   const { listCart } = useContext(CartContext);
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue, setFocus } = useForm();
 
+  const [selected, setSelected] = useState();
+  function onChangeValue(e) {
+    if (e.target.value !== selected) {
+      setSelected(e.target.value);
+    }
+  }
   function handleSubmitSendCart(data: any) {
     console.log(data);
   }
+  function checkCEP(e) {
+    const cep = e.target.value.replace(/\D/g, '');
+    setValue('cep', cep);
 
+    fetch(`https://viacep.com.br/ws/${cep}/json`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+
+        setValue('rua', data.logradouro);
+        setValue('bairro', data.bairro);
+        setValue('cidade', data.localidade);
+        setValue('uf', data.uf);
+        setFocus('numero');
+      });
+  }
+
+  const freteFixed = 9.23;
   return (
     <LayoutContainer style={{ paddingTop: '2rem' }}>
       <FormContainer onSubmit={handleSubmit(handleSubmitSendCart)}>
@@ -47,6 +68,7 @@ export function Cart() {
               placeholder="CEP"
               className="cep"
               {...register('cep', { valueAsNumber: true })}
+              onBlur={checkCEP}
             />
             <InputComponent
               className="rua"
@@ -90,14 +112,14 @@ export function Cart() {
                 </span>
               </p>
             </div>
-            <div className="selectTypePayment">
-              <ButtomPayment className="selected">
+            <div className="selectTypePayment" onClick={onChangeValue}>
+              <ButtomPayment type="button" value="Crédito">
                 <CreditCard size={16} /> Cartão de crédito
               </ButtomPayment>
-              <ButtomPayment>
+              <ButtomPayment type="button" value="Débito">
                 <Bank size={16} /> Cartão de débito
               </ButtomPayment>
-              <ButtomPayment>
+              <ButtomPayment type="button" value="Dinheiro">
                 <Money size={16} /> dinheiro
               </ButtomPayment>
             </div>
@@ -107,36 +129,28 @@ export function Cart() {
         <CompleteInfos>
           <h3>Cafés selecionados</h3>
           <CartCheck>
-            {listCart.map(({ id, image, name, price, quantity }) => (
-              <ItemSelected key={id}>
-                <img src={image} alt="" />
-                <div className="content">
-                  <div className="infos">
-                    <p>{name}</p>
-                    <div className="preco">R$ {price}</div>
-                  </div>
-                  <div className="actions">
-                    <QuantiControler value={quantity} />
-                    <button className="remover">
-                      <Trash /> Remover
-                    </button>
-                  </div>
-                </div>
-              </ItemSelected>
+            {listCart.map((item) => (
+              <CardItemCoffeCart
+                key={item.id}
+                id={item.id}
+                image={item.image}
+                name={item.name}
+                price={item.price}
+                quantity={item.quantity}
+                totalPriceItem={item.totalPrice}
+              />
             ))}
 
             <div className="resume">
               <div className="resumeItem">
-                <p>Toral de itens</p>
-                <p>R$ 29,30</p>
+                <p>Total de itens</p>
               </div>
               <div className="resumeItem">
                 <p>Entrega</p>
-                <p>R$ 9,30</p>
+                <p>R$ {freteFixed}</p>
               </div>
               <div className="resumeItem">
-                <p>Toral </p>
-                <p>R$ 38,60</p>
+                <p>Total </p>
               </div>
             </div>
             <button type="submit">Confirmar Pedido</button>

@@ -5,14 +5,15 @@ interface CartContextProviderProps {
   children: ReactNode;
 }
 
-interface ItemCarrinho {
+export interface ItemCarrinho {
   id: number;
   name: string;
   image: string;
-  description: string;
-  price: string;
+  description?: string;
+  price: number;
   quantity: number;
   tag?: string[] | undefined;
+  totalPrice?: number;
 }
 
 interface Cart {
@@ -22,6 +23,9 @@ interface Cart {
 interface ListaCartContext {
   listCart: ItemCarrinho[];
   addNewItemCart: (data: ItemCarrinho) => void;
+  deleteItem: (data: ItemCarrinho) => void;
+  updateQuantity: (data: ItemCarrinho) => void;
+  totalPrice: (data: ItemCarrinho) => void;
 }
 
 export const CartContext = createContext({} as ListaCartContext);
@@ -39,19 +43,44 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
           draft.listCart.push(action.payload.newItem);
         });
       }
-      if (action.type === 'UPDATE_ITEM_QUANTITY') {
+      if (action.type === 'UPDATE_ITEM_QUANTITY_NEWITEM') {
         const currentItem = state.listCart.findIndex(
           (item) => item.id === action.payload.verifyId.id,
         );
         return produce(state, (draft) => {
           draft.listCart[currentItem].quantity =
             action.payload.newItem.quantity;
-
-          // console.log(action.payload.newItem.quantity);
-          console.log('01=', currentItem);
-          console.log('00=', state.listCart);
         });
       }
+
+      if (action.type === 'UPDATE_ITEM') {
+        const currentItem = state.listCart.findIndex(
+          (item) => item.id === action.payload.CoffeItem.id,
+        );
+        return produce(state, (draft) => {
+          draft.listCart[currentItem].quantity =
+            action.payload.CoffeItem.quantity;
+        });
+      }
+
+      if (action.type === 'DELETE_ITEM') {
+        return produce(state, (draft) => {
+          draft.listCart = state.listCart.filter(
+            (item) => item.id !== action.payload.CoffeItem.id,
+          );
+        });
+      }
+
+      if (action.type === 'TOTAL_PRICE_ITEM') {
+        const currentItem = state.listCart.findIndex(
+          (item) => item.id === action.payload.CoffeItem.id,
+        );
+        return produce(state, (draft) => {
+          draft.listCart[currentItem].totalPrice =
+            action.payload.CoffeItem.quantity * action.payload.CoffeItem.price;
+        });
+      }
+
       return state;
     },
     {
@@ -88,14 +117,10 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     };
 
     const verifyId = listCart.find((c) => c.id === data.id);
-    if (verifyId) {
-      // return produce(state, (draft) => {
-      //   draft.verifyId.quantity.push(newItem.quantity);
-      // });
-      console.log('o que é o newItem.quantity=', newItem.quantity);
 
+    if (verifyId) {
       dispach({
-        type: 'UPDATE_ITEM_QUANTITY',
+        type: 'UPDATE_ITEM_QUANTITY_NEWITEM',
         payload: {
           verifyId,
           newItem,
@@ -108,12 +133,62 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
       });
     }
   }
+  function deleteItem(data: ItemCarrinho) {
+    const CoffeItem: ItemCarrinho = {
+      id: data.id,
+      name: data.name,
+      image: data.image,
+      description: data.description,
+      price: data.price,
+      quantity: data.quantity,
+    };
+
+    dispach({
+      type: 'DELETE_ITEM',
+      payload: { CoffeItem },
+    });
+  }
+
+  function updateQuantity(data: ItemCarrinho) {
+    const CoffeItem: ItemCarrinho = {
+      id: data.id,
+      name: data.name,
+      image: data.image,
+      description: data.description,
+      price: data.price,
+      quantity: data.quantity,
+    };
+
+    dispach({
+      type: 'UPDATE_ITEM',
+      payload: { CoffeItem },
+    });
+  }
+
+  function totalPrice(data: ItemCarrinho) {
+    const CoffeItem: ItemCarrinho = {
+      id: data.id,
+      name: data.name,
+      image: data.image,
+      description: data.description,
+      price: data.price,
+      quantity: data.quantity,
+    };
+
+    dispach({
+      type: 'TOTAL_PRICE_ITEM',
+      payload: { CoffeItem },
+    });
+  }
 
   return (
     <CartContext.Provider
       value={{
         listCart,
         addNewItemCart,
+        deleteItem,
+        updateQuantity,
+        totalPrice,
       }}
     >
       {children}
