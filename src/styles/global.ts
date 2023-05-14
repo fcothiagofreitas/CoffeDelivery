@@ -47,5 +47,9 @@ export const GlobalStyle = createGlobalStyle`
     cursor: pointer;
   }
  
-
+  @media (max-width: 30rem) {
+    html{
+      width: 100vw
+    }
+  } 
 `;

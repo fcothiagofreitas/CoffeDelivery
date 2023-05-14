@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react';
-import { CartContext } from '../../context/CartContext';
+import { useContext, useEffect, useState } from 'react';
+import { CartContext, Order } from '../../context/CartContext';
 import {
   Bank,
   CreditCard,
@@ -18,23 +18,40 @@ import {
 } from './styles';
 import { useForm } from 'react-hook-form';
 import { CardItemCoffeCart } from '../../components/CardItemCoffeCart';
+import { useNavigate } from 'react-router-dom';
 
 export function Cart() {
-  const { listCart } = useContext(CartContext);
+  const { listCart, orderConfirmation } = useContext(CartContext);
 
-  const { register, handleSubmit, setValue, setFocus } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    setFocus,
+    formState: { errors },
+  } = useForm<Order>();
 
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState('');
+  const [errorPaymentMethod, setErrorPaymentMethod] = useState(false);
 
   function onChangeValue(e) {
     if (e.target.value !== selected) {
       setSelected(e.target.value);
-      setValue('paymentMethod', selected);
+    } else {
+      setSelected('');
     }
   }
+
+  const navigate = useNavigate();
   function handleSubmitSendCart(data: any) {
-    console.log(data);
+    if (selected === '') {
+      setErrorPaymentMethod(!errorPaymentMethod);
+    } else {
+      orderConfirmation(data);
+      navigate('/confirmation');
+    }
   }
+  const [errorForm, setErrorForm] = useState(false);
   function checkCEP(e) {
     const cep = e.target.value.replace(/\D/g, '');
     setValue('cep', cep);
@@ -43,7 +60,9 @@ export function Cart() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-
+        if (data.erro) {
+          setErrorForm(!errorForm);
+        }
         setValue('rua', data.logradouro);
         setValue('bairro', data.bairro);
         setValue('cidade', data.localidade);
@@ -55,6 +74,11 @@ export function Cart() {
   const freteFixed = 9.23;
   const totalItensValue = listCart.reduce((a, b) => a + b.totalPrice, 0);
   const totalOrder = totalItensValue + freteFixed;
+
+  useEffect(() => {
+    setValue('paymentMethod', selected);
+  }, [selected, setValue]);
+
   return (
     <LayoutContainer style={{ paddingTop: '2rem' }}>
       <FormContainer onSubmit={handleSubmit(handleSubmitSendCart)}>
@@ -68,42 +92,57 @@ export function Cart() {
                 <span>Informe o endereço onde deseja receber seu pedido</span>
               </p>
             </div>
-            <InputComponent
-              placeholder="CEP"
-              className="cep"
-              {...register('cep', { valueAsNumber: true })}
-              onBlur={checkCEP}
-            />
-            <InputComponent
-              className="rua"
-              placeholder="Rua"
-              {...register('rua')}
-            />
-            <InputComponent
-              placeholder="Número"
-              className="numero"
-              {...register('numero')}
-            />
+            <div className="campoItem">
+              <InputComponent
+                placeholder="CEP"
+                className="cep"
+                type="number"
+                {...register('cep', { valueAsNumber: true, required: true })}
+                onBlur={checkCEP}
+              />
+              {errorForm === true && <p>CEP não encontrado</p>}
+              {errors.cep && <p>CEP é obrigatório</p>}
+            </div>
+            <div className="campoItem rua">
+              <InputComponent
+                className="rua"
+                placeholder="Rua"
+                {...register('rua', { required: true })}
+              />
+              {errors.rua && <p>Rua é obrigatório</p>}
+            </div>
+            <div className="campoItem numero">
+              <InputComponent
+                placeholder="Número"
+                className="numero"
+                {...register('numero', { required: true })}
+              />
+              {errors.cep && (
+                <p>Número é obrigatório, caso nao tenha deixe como S/N</p>
+              )}
+            </div>
             <InputComponent
               placeholder="Complemento"
               className="complemento"
               {...register('complemento')}
             />
-            <InputComponent
-              className="bairro"
-              placeholder="Bairro"
-              {...register('bairro')}
-            />
-            <InputComponent
-              className="cidade"
-              placeholder="Cidade"
-              {...register('cidade')}
-            />
-            <InputComponent
-              className="uf"
-              placeholder="UF"
-              {...register('uf')}
-            />
+            <div className="campoItem maisInforEndereco">
+              <InputComponent
+                className="bairro"
+                placeholder="Bairro"
+                {...register('bairro')}
+              />
+              <InputComponent
+                className="cidade"
+                placeholder="Cidade"
+                {...register('cidade')}
+              />
+              <InputComponent
+                className="uf"
+                placeholder="UF"
+                {...register('uf')}
+              />
+            </div>
           </Card>
           <Card>
             <div className="topoInfo">
@@ -177,6 +216,11 @@ export function Cart() {
               </div>
             </div>
             <button type="submit">Confirmar Pedido</button>
+            {errorPaymentMethod ? (
+              <p className="error">Selecione uma forma de pagamento</p>
+            ) : (
+              ''
+            )}
           </CartCheck>
         </CompleteInfos>
       </FormContainer>

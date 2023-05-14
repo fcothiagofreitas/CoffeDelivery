@@ -14,13 +14,16 @@ export const ConfirmationSend = styled.div`
     font-size: 1.25rem;
     margin-bottom: 4rem;
   }
+  img {
+    width: 100%;
+  }
 
   .details {
     display: flex;
     border: 1px solid;
     flex-direction: column;
     padding: 2.5rem;
-    max-width: 32rem;
+    max-width: 23rem;
     background: linear-gradient(
           ${(props) => props.theme['gray-100']},
           ${(props) => props.theme['gray-100']}

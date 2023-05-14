@@ -13,6 +13,23 @@ export const CompleteInfos = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  .campoItem {
+    width: 100%;
+    input + p {
+      margin-top: 0.2rem;
+      font-size: 0.75rem;
+      color: ${(props) => props.theme['purple-900']};
+      overflow-wrap: break-word;
+    }
+  }
+  .error {
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+    color: ${(props) => props.theme['purple-900']};
+    inline-size: 150px;
+    overflow-wrap: break-word;
+  }
   .topoInfo {
     display: flex;
     width: 100%;
@@ -35,25 +52,16 @@ export const CompleteInfos = styled.div`
       color: ${(props) => props.theme['purple-500']};
     }
   }
+  .maisInforEndereco {
+    input + input {
+      margin-top: 1rem;
+    }
+  }
   .inputsStyle {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-
-    .rua {
-      width: 100%;
-    }
-    .complemento {
-      width: 60%;
-    }
-    .uf {
-      width: 20%;
-    }
-    .numero,
-    .bairro,
-    .cidade {
-      flex: 1;
-    }
+    width: 100%;
   }
   .selected {
     background: ${(props) => props.theme['purple-400']};
@@ -68,9 +76,12 @@ export const CompleteInfos = styled.div`
   }
   .selectTypePayment {
     display: flex;
+    flex-direction: column;
     gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    button {
+      width: 100%;
+      justify-content: flex-start;
+    }
   }
 
   .resume {
@@ -86,6 +97,40 @@ export const CompleteInfos = styled.div`
   button[type='submit'] {
     background: ${(props) => props.theme['yellow-500']};
   }
+  @media (min-width: 768px) {
+    .selectTypePayment {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      button {
+        justify-content: flex-start;
+      }
+    }
+
+    .cep {
+      width: 15rem;
+    }
+    .numero {
+      flex: 2;
+    }
+    .complemento {
+      flex: 1;
+    }
+
+    .bairro,
+    .cidade {
+      width: 40%;
+    }
+    .uf {
+      flex: 1;
+    }
+    .maisInforEndereco {
+      display: flex;
+      gap: 1rem;
+      input + input {
+        margin: 0;
+      }
+    }
+  }
 `;
 
 export const CartCheck = styled.div`
@@ -98,14 +143,12 @@ export const CartCheck = styled.div`
 
 export const InputComponent = styled.input`
   display: flex;
-  align-items: center;
   padding: 12px;
   background: ${(props) => props.theme['gray-400']};
-  gap: 4px;
   border: 1px solid ${(props) => props.theme['gray-500']};
   border-radius: 4px;
-
   height: 42px;
+  width: 100%;
   &:focus,
   &:focus-visible {
     box-shadow: 0 0 0 1px ${(props) => props.theme['yellow-900']};

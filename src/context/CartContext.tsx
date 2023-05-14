@@ -28,14 +28,17 @@ export interface Order {
 
 interface Cart {
   listCart: ItemCarrinho[];
+  order: Order[];
 }
 
 interface ListaCartContext {
   listCart: ItemCarrinho[];
+  order: Order[];
   addNewItemCart: (data: ItemCarrinho) => void;
   deleteItem: (data: ItemCarrinho) => void;
   updateQuantity: (data: ItemCarrinho) => void;
   totalPrice: (data: ItemCarrinho) => void;
+  orderConfirmation: (data: Order) => void;
 }
 
 export const CartContext = createContext({} as ListaCartContext);
@@ -90,11 +93,18 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
             action.payload.CoffeItem.quantity * action.payload.CoffeItem.price;
         });
       }
+      if (action.type === 'ORDER_COMFIRMATION') {
+        return produce(state, (draft) => {
+          draft.order = action.payload.newOrder;
+          draft.listCart = [];
+        });
+      }
 
       return state;
     },
     {
       listCart: [],
+      order: [],
     },
     (initialState) => {
       const storedStateAsJSON = localStorage.getItem(
@@ -113,7 +123,7 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
   }, [listaCarrinhoState]);
 
   // console.log(listaCarrinhoState);
-  const { listCart } = listaCarrinhoState;
+  const { listCart, order } = listaCarrinhoState;
 
   // const {};
   function addNewItemCart(data: ItemCarrinho) {
@@ -190,15 +200,32 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
       payload: { CoffeItem },
     });
   }
-
+  function orderConfirmation(data: Order) {
+    const newOrder: Order = {
+      bairro: data.bairro,
+      cep: data.cep,
+      cidade: data.cidade,
+      complemento: data.complemento,
+      numero: data.numero,
+      paymentMethod: data.paymentMethod,
+      rua: data.rua,
+      uf: data.uf,
+    };
+    dispach({
+      type: 'ORDER_COMFIRMATION',
+      payload: { newOrder },
+    });
+  }
   return (
     <CartContext.Provider
       value={{
         listCart,
+        order,
         addNewItemCart,
         deleteItem,
         updateQuantity,
         totalPrice,
+        orderConfirmation,
       }}
     >
       {children}

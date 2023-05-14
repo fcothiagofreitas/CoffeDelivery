@@ -2,8 +2,13 @@ import { LayoutContainer } from '../../layouts/styles';
 import deliveryImg from '../../assets/delivery.svg';
 import { CurrencyDollar, MapPin, Timer } from 'phosphor-react';
 import { ConfirmationSend } from './styles';
+import { useContext } from 'react';
+import { CartContext } from '../../context/CartContext';
 
 export function Confirmation() {
+  const { order } = useContext(CartContext);
+  console.log(order);
+
   return (
     <LayoutContainer style={{ paddingTop: '2rem' }}>
       <ConfirmationSend>
@@ -16,8 +21,11 @@ export function Confirmation() {
                 <MapPin weight="fill" />
               </span>
               <p>
-                Entrega em <strong>Rua João Daniel Martinelli, 102</strong>{' '}
-                Farrapos - Porto Alegre, RS
+                Entrega em
+                <strong>
+                  {order.rua}, {order.numero}
+                </strong>
+                {order.bairro} - {order.cidade}, {order.uf}
               </p>
             </div>
             <div className="previewTime">
@@ -33,7 +41,7 @@ export function Confirmation() {
                 <CurrencyDollar />
               </span>
               <p>
-                Pagamento na entrega <b>Cartão de Crédito</b>
+                Pagamento na entrega <b>{order.paymentMethod}</b>
               </p>
             </div>
           </div>
