@@ -15,7 +15,7 @@ export const ConfirmationSend = styled.div`
     margin-bottom: 4rem;
   }
   img {
-    width: 100%;
+    max-width: 100%;
   }
 
   .details {
