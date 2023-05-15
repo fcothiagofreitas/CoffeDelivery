@@ -21,7 +21,7 @@ import { CardItemCoffeCart } from '../../components/CardItemCoffeCart';
 import { useNavigate } from 'react-router-dom';
 
 export function Cart() {
-  const { listCart, orderConfirmation } = useContext(CartContext);
+  const { listCart, orderConfirmation, order } = useContext(CartContext);
 
   const {
     register,
@@ -34,7 +34,7 @@ export function Cart() {
   const [selected, setSelected] = useState('');
   const [errorPaymentMethod, setErrorPaymentMethod] = useState(false);
 
-  function onChangeValue(e) {
+  function onChangeValue(e: any) {
     if (e.target.value !== selected) {
       setSelected(e.target.value);
     } else {
@@ -52,7 +52,18 @@ export function Cart() {
     }
   }
   const [errorForm, setErrorForm] = useState(false);
-  function checkCEP(e) {
+  useEffect(() => {
+    if (order) {
+      setValue('cep', order.cep);
+      setValue('rua', order.rua);
+      setValue('bairro', order.bairro);
+      setValue('cidade', order.cidade);
+      setValue('uf', order.uf);
+      setValue('numero', order.numero);
+    }
+  }, []);
+
+  function checkCEP(e: any) {
     const cep = e.target.value.replace(/\D/g, '');
     setValue('cep', cep);
 
@@ -72,7 +83,9 @@ export function Cart() {
   }
 
   const freteFixed = 9.23;
-  const totalItensValue = listCart.reduce((a, b) => a + b.totalPrice, 0);
+
+  const totalItensValue = listCart.reduce((a, b) => a + b.totalPrice!, 0);
+
   const totalOrder = totalItensValue + freteFixed;
 
   useEffect(() => {

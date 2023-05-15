@@ -7,9 +7,9 @@ import { CartContext } from '../../context/CartContext';
 
 export function Confirmation() {
   const { order } = useContext(CartContext);
-  console.log(order);
-
   return (
+    // Define the object type like below when you don't know ALL property names
+
     <LayoutContainer style={{ paddingTop: '2rem' }}>
       <ConfirmationSend>
         <div className="infosPedido">
@@ -23,6 +23,7 @@ export function Confirmation() {
               <p>
                 Entrega em
                 <strong>
+                  {' '}
                   {order.rua}, {order.numero}
                 </strong>
                 {order.bairro} - {order.cidade}, {order.uf}

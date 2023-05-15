@@ -28,12 +28,12 @@ export interface Order {
 
 interface Cart {
   listCart: ItemCarrinho[];
-  order: Order[];
+  order: Order;
 }
 
 interface ListaCartContext {
   listCart: ItemCarrinho[];
-  order: Order[];
+  order: Order;
   addNewItemCart: (data: ItemCarrinho) => void;
   deleteItem: (data: ItemCarrinho) => void;
   updateQuantity: (data: ItemCarrinho) => void;
